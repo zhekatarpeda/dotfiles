@@ -1,0 +1,48 @@
+#!/bin/env sh
+
+cpu() {
+	cpu="$(grep -o "^[^ ]*" /proc/loadavg)"
+}
+
+memory() {
+	memory="RAM  $(free | awk 'NR == 2 {printf("%.0f%"), $3/$2*100}')"
+	#memory="$(free -h | sed -n "2s/\([^ ]* *\)\{2\}\([^ ]*\).*/\2/p")"
+}
+
+disk() {
+	disk="Rewt $(df -h | awk 'NR==5{print $5}') Home $(df -h | awk 'NR==9{print $5}')"
+}
+
+datetime() {
+	datetime="| $(date "+%d.%m.%Y %H:%M") |"
+}
+
+bat() {
+	read -r bat_status < /sys/class/power_supply/BAT0/status
+	read -r bat_capacity < /sys/class/power_supply/BAT0/capacity
+	bat="$bat_status $bat_capacity%"
+}
+
+display() {
+	echo "all status ^fg(f0c674)[$memory $cpu $disk] [$bat] ^bg(4a3f32)$datetime" >"$FIFO"
+}
+
+printf "%s" "$$" > "$XDG_RUNTIME_DIR/status_pid"
+FIFO="$XDG_RUNTIME_DIR/sandbar"
+[ -e "$FIFO" ] || mkfifo "$FIFO"
+sec=0
+
+while true; do
+	sleep 1 &
+	wait && {
+		[ $((sec % 15)) -eq 0 ] && memory
+		[ $((sec % 5)) -eq 0 ] && cpu
+		[ $((sec % 60)) -eq 0 ] && disk
+		[ $((sec % 5)) -eq 0 ] && bat
+		[ $((sec % 5)) -eq 0 ] && datetime
+
+		[ $((sec % 5)) -eq 0 ] && display
+
+		sec=$((sec+1))
+	}
+done

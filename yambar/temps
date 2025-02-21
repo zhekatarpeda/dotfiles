@@ -1,0 +1,14 @@
+#!/bin/sh
+
+while true; do
+	#cpu=$(cat /sys/class/hwmon/hwmon3/temp1_input | awk 'NR == 1{printf "%d", $1/1000}')
+	#amdgpu=$(cat /sys/class/hwmon/hwmon2/temp1_input | awk 'NR == 1{printf "%d", $1/1000}')
+	#nvidia=$(cat /sys/class/hwmon/hwmon1/temp1_input | awk 'NR == 1{printf "%d", $1/1000}')
+	acpi=$(cat /sys/class/hwmon/hwmon4/temp1_input | awk 'NR == 1{printf "%d", $1/1000}')
+	#echo "cpu|string|${cpu}"
+	#echo "amdgpu|string|${amdgpu}"
+	#echo "nvidia|string|${nvidia}"
+	echo "acpi|string|${acpi}"
+	echo ""
+	sleep 5
+done

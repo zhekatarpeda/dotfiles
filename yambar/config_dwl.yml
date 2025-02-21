@@ -1,0 +1,231 @@
+bg_default: &bg_default {stack: [{background: {color: 81A1C1ff}}, {underline: {size: 4, color: D8DEE9ff}}]}
+logo_mode: &logo_mode {text: " ", font: Siji:pixelsize=10, foreground: "f0c674ff", left-margin: 6}
+siji: &siji Siji:pixelsize=10
+buttons: &buttons {stack: [{background: {color: f0c674ff}}, {border: {size: 4, color: 383027ff}}]}
+volume: &volume {left: amixer set Master 7%+, wheel-up: amixer set Master 7%+, right: amixer set Master 7%-, wheel-down: amixer set Master 7%-, middle: foot -e alsamixer}
+bar:
+  height: 26
+  right-margin: 10
+  spacing: 2
+  location: top
+  background: 383027ff
+  foreground: cac1a8ff
+  font: Terminus:style=Bold:pixelsize=16
+
+  center:
+    - clock:
+        time-format: "%H:%M:%S"
+        date-format: "%d.%m.%Y"
+        content:
+          - string: {text: " {date} {time} ", foreground: "f0c674ff", deco: {stack: [background: {color: 4a3f32ff}, underline: {size: 2, color: f0c674ff}]}}
+  left:
+    - dwl:
+        number-of-tags: 5
+        #dwl-info-filename: "$HOME/dwl_info"
+        name-of-tags: [ 1, 2, 3, 4, 5 ]
+        content:
+          list:
+            items:
+              - map:
+                  conditions:
+                    # default tag
+                    id == 0: {string: {text: "{layout} {title}"}}
+                    selected: {string: {text: "-> {name}"}}
+                    ~empty: {string: {text: "{name}"}}
+                    urgent: {string: {text: "=> {name} <="}}
+#    - river:
+#        anchors:
+#          - base: &river_base
+#              left-margin: 6
+#              right-margin: 6
+#              #default: {string: {text: }}
+#              conditions:
+#                id == 1: {string: {text: 1}}
+#                id == 2: {string: {text: 2}}
+#                id == 3: {string: {text: 3}}
+#                id == 4: {string: {text: 4}}
+#                id == 5: {string: {text: 5}}
+#
+#        content:
+#          map:
+#            on-click:
+#              left: sh -c "riverctl set-focused-tags $((1 << ({id} - 1)))"
+#              #right: sh -c "riverctl toggle-focused-tags $((1 << ({id} -1)))"
+#              #middle: sh -c "riverctl toggle-view-tags $((1 << ({id} -1)))"
+#            conditions:
+#              state == urgent:
+#                map:
+#                  <<: *river_base
+#                  deco: {background: {color: D08770ff}}
+#              state == focused:
+#                map:
+#                  <<: *river_base
+#                  foreground: "f0c674ff"
+#                  deco: {background: {color: 4a3f32ff}}
+#                  #deco: {stack: [background: {color: 4a3f32ff}, underline: {size: 2, color: f0c674ff}]}
+#              state == visible && ~occupied:
+#                map:
+#                  <<: *river_base
+#                  foreground: "817869ff"
+#              state == visible && occupied: # i really dunno what to do here and why wayland compositors made that retarded decision to hide unused tags so i just to duplicate the deco
+#                map:
+#                  <<: *river_base
+#                  #deco: {underline: {size: 2, color: cac1a8ff}}
+#              state == unfocused:
+#                map:
+#                  <<: *river_base
+#              state == invisible && ~occupied:
+#                map:
+#                  <<: *river_base
+#                  foreground: "817869ff"
+#              state == invisible && occupied:
+#                map:
+#                  <<: *river_base
+#                  #deco: {underline: {size: 2, color: cac1a8ff}}
+#
+#        title:
+#          map:
+#            on-click:
+#              left: riverctl enter-mode normal
+#              right: riverctl enter-mode passthrough
+#            conditions:
+#              mode == normal:
+#                list:
+#                  items:
+#                    - string: *logo_mode
+#                    - string: {text: "nrml"}
+#              mode == passthrough:
+#                list:
+#                  items:
+#                    - string: *logo_mode
+#                    - string: {text: "pthr"}
+
+    - label:
+        content: {string: {text: "", margin: 8, foreground: "383027ff",font: *siji, deco: *buttons,  on-click: {left: foot}}}
+    - label:
+        content: {string: {text: "", margin: 8, foreground: "383027ff",font: *siji, deco: *buttons,  on-click: {left: foot -e nnn}}}
+    - label:
+        content: {string: {text: "", margin: 8, foreground: "383027ff",font: *siji, deco: *buttons,  on-click: {left: firefox-wayland}}}
+    - label:
+        content: {string: {text: "", margin: 8, foreground: "383027ff",font: *siji, deco: *buttons,  on-click: {left: fuzzel}}}
+        #content: {string: {text: "", margin: 8, foreground: "383027ff",font: *siji, deco: *buttons,  on-click: {left: riverctl spawn "bemenu-run --fixed-height -H 26 --fn 'Terminus Bold 12' --tb '#383027' --tf '#817869' --ff '#cac1a8' --fb '#383027' --nf '#cac1a8' --nb '#383027' --ab '#383027' --af '#cac1a8' --hb '#817869' --hf '#f0c674' --sb '#817869' --sf '#f0c674' --prompt 'Esc - exit up - next down - prev' "}}} #to-do: dmenu
+    #- label:
+        #content: {string: {text: "", margin: 8, foreground: "383027ff",font: *siji, deco: *buttons,  on-click: {left: riverctl spawn foot}}} #to-do: conky
+ 
+    - network:
+        poll-interval: 5000
+        spacing: 4
+        content:
+          map:
+            default: {empty: {}}
+            conditions:
+              name == wlo1:
+                map:
+                  default:
+                    - string: {text: " ", font: *siji}
+                    - string: {text:  "N/A", foreground: "817869ff"}
+                  conditions:
+                    state == up:
+                      - string: {text: " ", font: *siji, foreground: "f0c674ff"}
+                      - string: {text: "{ssid} {dl-speed:mb} Mb/s"}
+                    state == down:
+                      - string: {text: " ", font: *siji}
+                      - string: {text: "D/C", foreground: "817869ff"}
+              name == eno1:
+                map:
+                  default:
+                    - string: {text: " ", font: *siji}
+                    - string: {text: "???"}
+                  conditions:
+                    state == up:
+                      - string: {text: " ", font: *siji, foreground: "f0c674ff"}
+                      - string: {text: "{dl-speed:mb} Mb/s"}
+                    state == down:
+                      - string: {text: " ", font: *siji}
+                      - string: {text: "D/C", foreground: "817869ff"}
+ 
+  right:
+  - backlight:
+      name: amdgpu_bl1
+      content:
+        - string: {text: " ", foreground: "f0c674ff", font: *siji, left-margin: 4}
+        - string: {text: "{percent}%", right-margin: 4} 
+  - alsa:
+      card: default
+      mixer: Master
+      content:
+        - string: {text: " ", foreground: "f0c674ff", font: *siji, left-margin: 4, on-click: *volume}
+        - string: {text: "{percent}%", right-margin: 4, on-click: *volume}
+  - script:
+      path: /home/zheka_tarpeda/.config/yambar/disk_space
+      args: []
+      content:
+        - string: {text: " ", foreground: "f0c674ff", font: *siji, left-margin: 4}
+        - string: {text: "{rewt}", right-margin: 8}
+        - string: {text: " ", foreground: "f0c674ff", font: *siji}
+        - string: {text: "{home}", right-margin: 4}
+  - mem:
+      poll-interval: 2500
+      content:
+        list:
+          items:
+            - string: {text: " ", foreground: "f0c674ff", font: *siji, left-margin: 4}
+            - string: {text: "{percent_used}%", right-margin: 4}
+  - cpu:
+      poll-interval: 2500
+      content:
+        map:
+          conditions:
+            id<0:
+              - string: {text: " ", foreground: "f0c674ff", font: *siji, left-margin: 4}
+              - string: {text: "{cpu}%", right-margin: 4}
+  - script:
+      path: /home/zheka_tarpeda/.config/yambar/temps
+      args: []
+      content:
+        #- string: {text: " ", foreground: "f0c674ff", font: *siji, left-margin: 4}
+        #- string: {text: "{cpu} °C", right-margin: 4}
+        #- string: {text: " ", foreground: "f0c674ff", font: *siji, left-margin: 4}
+        #- string: {text: "{amdgpu} °C", right-margin: 4}
+        #- string: {text: " ", foreground: "f0c674ff", font: *siji, left-margin: 4}
+        #- string: {text: "{nvidia} °C", right-margin: 4}
+        - string: {text: " ", foreground: "f0c674ff", font: *siji, left-margin: 4}
+        - string: {text: "{acpi} °C", right-margin: 4} 
+  - battery:  # to-do: add battery modes
+      name: BAT0
+      poll-interval: 2500
+      anchors:
+        discharging: &discharging
+          list:
+            items:
+              - ramp:
+                  left-margin: 4
+                  tag: capacity
+                  items:
+                    - string: {text: " ", foreground: "a54242ff", font: *siji}
+                    - string: {text: " ", foreground: "a54242ff", font: *siji}
+                    - string: {text: " ", foreground: "a54242ff", font: *siji}
+                    - string: {text: " ", foreground: "f0c674ff", font: *siji}
+                    - string: {text: " ", foreground: "f0c674ff", font: *siji}
+                    - string: {text: " ", foreground: "f0c674ff", font: *siji}
+                    - string: {text: " ", foreground: "f0c674ff", font: *siji}
+                    - string: {text: " ", foreground: "f0c674ff", font: *siji}
+                    - string: {text: " ", foreground: "f0c674ff", font: *siji}
+              - string: {text: "{capacity}%"}
+      content:
+        map:
+          conditions:
+            state == unknown:
+              <<: *discharging
+            state == discharging:
+              <<: *discharging
+            state == charging:
+              - string: {text: " ", foreground: "8abeb7ff", font: *siji}
+              - string: {text: "{capacity}%"}
+            state == full:
+              - string: {text: " ", foreground: "8abeb7ff", font: *siji}
+              - string: {text: "{capacity}%"}
+            state == "not charging":
+              - string: {text: " ", foreground: "a54242ff", font: *siji}
+              - string: {text: "{capacity}%"}
+

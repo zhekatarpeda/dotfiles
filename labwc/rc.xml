@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+
+<!--
+  This is a very simple config file with many options missing. For a complete
+  set of options with comments, see docs/rc.xml.all
+-->
+
+<labwc_config>
+
+  <placement>
+    <policy>automatic</policy>
+  </placement>
+
+  <theme>
+    <name></name>
+    <titlebar>
+      <layout>:max,close</layout>
+      <showTitle>yes</showTitle>
+    </titlebar>
+    <cornerRadius>0</cornerRadius>
+    <font name="Terminus" weight="bold" size="10" />
+  </theme>
+
+  <desktops>
+    <popupTime>1000</popupTime>
+    <names>
+      <name>1</name>
+      <name>2</name>
+      <name>3</name>
+      <name>4</name>
+      <name>5</name>
+    </names>
+  </desktops>
+
+  <keyboard>
+    <numlock>off</numlock>
+    <layoutScope>global</layoutScope>
+    <repeatRate>50</repeatRate>
+    <repeatDelay>300</repeatDelay>
+    <default />
+    <!-- Use a different terminal emulator -->
+    <keybind key="W-S-Return">
+      <action name="Execute" command="foot" />
+    </keybind>
+    <keybind key="W-q">
+      <action name="Close" />
+    </keybind>
+    <!--
+      Remove a previously defined keybind
+      A shorter alternative is <keybind key="W-F4" />
+    -->
+    <keybind key="W-F1">
+      <action name="GoToDesktop" to="1" wrap="no" />
+    </keybind>
+    <keybind key="W-F2">
+      <action name="GoToDesktop" to="2" wrap="no" />
+    </keybind>
+    <keybind key="W-F3">
+      <action name="GoToDesktop" to="3" wrap="no" />
+    </keybind>
+    <keybind key="W-F4">
+      <action name="GoToDesktop" to="4" wrap="no" />
+    </keybind>
+    <keybind key="W-F5">
+      <action name="GoToDesktop" to="5" wrap="no" />
+    </keybind>
+    <keybind key="W-A-Space">
+      <action name="ShowMenu" menu="client-menu" atCursor="no" />
+    </keybind>
+    <keybind key="W-Escape">
+      <action name="ShowMenu" menu="root-menu" />
+    </keybind>
+    <keybind key="W-A-Escape">
+      <action name="ShowMenu" menu="some-custom-menu" />
+    </keybind>
+    <keybind key="W-C-Left">
+      <action name="MoveToEdge" direction="left" />
+    </keybind>
+    <keybind key="W-C-Right">
+      <action name="MoveToEdge" direction="right" />
+    </keybind>
+    <keybind key="W-C-Up">
+      <action name="MoveToEdge" direction="up" />
+    </keybind>
+    <keybind key="W-C-Down">
+      <action name="MoveToEdge" direction="down" />
+    </keybind>
+    <keybind key="W-S-C-Left">
+      <action name="SnapToEdge" direction="left" />
+    </keybind>
+    <keybind key="W-S-C-Right">
+      <action name="SnapToEdge" direction="right" />
+    </keybind>
+    <keybind key="W-S-C-Up">
+      <action name="SnapToEdge" direction="up" />
+    </keybind>
+    <keybind key="W-S-C-Down">
+      <action name="SnapToEdge" direction="down" />
+    </keybind>
+  </keyboard>
+
+  <mouse>
+    <default />
+    <!-- Show a custom menu on desktop right click -->
+    <context name="Root">
+      <mousebind button="Right" action="Press">
+        <action name="ShowMenu" menu="some-custom-menu" />
+      </mousebind>
+    </context>
+  </mouse>
+
+</labwc_config>

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+while true; do
+	rewt=$(df -h | awk 'NR==5{print $5}')
+	home=$(df -h | awk 'NR==9{print $5}')
+	echo "rewt|string|${rewt}"
+	echo "home|string|${home}"
+	echo ""
+	sleep 40
+done
